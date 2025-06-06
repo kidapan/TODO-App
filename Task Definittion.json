@@ -8,7 +8,7 @@
   "containerDefinitions": [
     {
       "name": "todo",
-      "image": "REPLACE_IMAGE",  // GitHub Actions で差し替えられる
+      "image": "REPLACE_IMAGE",
       "cpu": 0,
       "portMappings": [
         {
@@ -30,10 +30,12 @@
         {
           "name": "DB_USER",
           "value": "admin"
-        },
+        }
+      ],
+      "secrets": [
         {
           "name": "DB_PASSWORD",
-          "value": "testtesttest"
+          "valueFrom": "arn:aws:secretsmanager:ap-northeast-1:620933121490:secret:prod/db/password"
         }
       ],
       "logConfiguration": {
