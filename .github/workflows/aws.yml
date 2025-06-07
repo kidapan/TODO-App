@@ -8,7 +8,7 @@ on:
 env:
   AWS_REGION: ap-northeast-1
   ECR_REPOSITORY: express-demo-app
-  ECS_CLUSTER: express-demo-app-cluster
+  ECS_CLUSTER: express-demo-app-cruster
   ECS_SERVICE: todo-app-service
   ECS_TASK_DEFINITION_NAME: express-demo-app-taskdef
   CONTAINER_NAME: express-demo-container  # ECS タスク定義内のコンテナ名
