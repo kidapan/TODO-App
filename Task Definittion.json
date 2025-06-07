@@ -17,7 +17,7 @@
       "protocol": "tcp"
       }
       ]
-      ],
+      ,
       "essential": true,
       "environment": [
         {
