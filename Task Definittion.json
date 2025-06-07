@@ -11,11 +11,12 @@
       "image": "REPLACE_IMAGE",
       "cpu": 0,
       "portMappings": [
-        {
-          "containerPort": 3000,
-          "hostPort": 0,
-          "protocol": "tcp"
-        }
+      {
+      "containerPort": 3000,
+      "hostPort": 3000,
+      "protocol": "tcp"
+      }
+      ]
       ],
       "essential": true,
       "environment": [
