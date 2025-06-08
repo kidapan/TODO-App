@@ -68,6 +68,43 @@ app.listen(port, () => {
   console.log(`Server running at port:${port}/`);
 });
 
+enum TodoStatus {
+  TODO = 'TODO',
+  IN_PROGRESS = 'IN_PROGRESS',
+  DONE = 'DONE'
+}
+
+app.put('/post/:id', async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+    const { status } = req.body;
+
+    if (isNaN(id)) {
+      return res.status(400).json({ error: 'Invalid ID' });
+    }
+
+    if (!Object.values(TodoStatus).includes(status)) {
+      return res.status(400).json({ error: 'Invalid status value' });
+    }
+
+    const [result] = await pool.query<mysql.ResultSetHeader>(
+      `UPDATE todos SET status = ?, updated_at = CURRENT_TIMESTAMP(3) WHERE id = ?`,
+      [status, id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Todo not found' });
+    }
+
+    res.status(200).json({ message: 'Status updated successfully' });
+  } catch (error) {
+    console.error('Error updating todo:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    });
+  }
+});
 
 
 
