@@ -13,6 +13,7 @@ env:
   ECS_TASK_DEFINITION_NAME: express-demo-app-taskdef
   CONTAINER_NAME: express-demo-container  # ECS タスク定義内のコンテナ名
   IMAGE_TAG: ${{ github.sha }}
+  APP_PORT: 3000
 
 jobs:
   deploy:
