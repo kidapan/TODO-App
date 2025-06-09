@@ -1,25 +1,19 @@
 # TODO-App
 
-TypeScript + Express + MySQL で構築されたシンプルなTODO管理APIです。Docker環境で動作し、AWS ECSへの自動デプロイに対応しています。
+TypeScript + Express + MySQL で構築されたTODO管理APIです。Docker環境で動作し、AWS ECSへの自動デプロイに対応しています。
 
 ## 🚀 機能
 
 - ✅ TODO の作成、取得、更新、削除（CRUD操作）
 - 📝 TODO ステータス管理（TODO/DONE）
-- 📚 OpenAPI仕様書とSwagger UI
 - 🐳 Docker & Docker Compose 対応
 - ☁️ AWS ECS への自動デプロイ
-- 🔄 ホットリロード開発環境
 
 ## 🛠 技術スタック
 
 - **言語**: TypeScript
 - **フレームワーク**: Express.js
 - **データベース**: MySQL 8.4
-- **ORM**: mysql2
-- **開発ツール**:
-  - nodemon（ホットリロード）
-  - ts-node（TypeScript実行）
 - **インフラ**:
   - Docker & Docker Compose
   - AWS ECS/ECR
@@ -179,31 +173,9 @@ CREATE TABLE todos (
 );
 ```
 
-## 🐳 Docker
-
-### 開発環境
-
-```bash
-# 開発用コンテナでビルド
-docker build -f Dockerfile.dev -t todo-app-dev .
-
-# 実行
-docker run -p 3000:3000 todo-app-dev
-```
-
-### 本番環境
-
-```bash
-# 本番用マルチステージビルド
-docker build -t todo-app .
-
-# 実行
-docker run -p 3000:3000 todo-app
-```
-
 ## ☁️ AWS デプロイ
 
-このプロジェクトは GitHub Actions を使用して AWS ECS への自動デプロイに対応しています。
+GitHub Actions を使用して AWS ECS への自動デプロイに対応しています。
 
 ### 前提条件
 
@@ -226,32 +198,6 @@ docker run -p 3000:3000 todo-app
 4. ECS タスク定義更新
 5. ECS サービス更新
 
-## 📚 開発
-
-### 開発コマンド
-
-```bash
-# 依存関係インストール
-npm install
-
-# 開発サーバー起動
-npm run dev
-
-# TypeScriptビルド
-npm run build
-
-# 本番サーバー起動
-npm start
-```
-
-### コード構成
-
-- `src/index.ts`: メインアプリケーションファイル
-  - Express サーバー設定
-  - ルート定義
-  - データベース接続
-  - エラーハンドリング
-
 ## 🔍 API ドキュメント
 
 Swagger UI で API仕様を確認できます：
@@ -259,47 +205,3 @@ Swagger UI で API仕様を確認できます：
 1. アプリケーションを起動
 2. ブラウザで `index.html` を開く
 3. OpenAPI仕様（`api-spec.yaml`）が自動で読み込まれます
-
-## 📝 ライセンス
-
-ISC
-
-## 🤝 コントリビューション
-
-1. このリポジトリをフォーク
-2. 機能ブランチを作成 (`git checkout -b feature/amazing-feature`)
-3. 変更をコミット (`git commit -m 'Add some amazing feature'`)
-4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
-5. プルリクエストを作成
-
-## ❓ トラブルシューティング
-
-### よくある問題
-
-#### MySQL 接続エラー
-
-```bash
-# Docker Composeでの解決
-docker-compose down
-docker-compose up --build
-```
-
-#### ポート競合
-
-```bash
-# 使用中のポートを確認
-lsof -i :3000
-lsof -i :3306
-
-# プロセスを終了
-kill -9 <PID>
-```
-
-#### TypeScript コンパイルエラー
-
-```bash
-# node_modules とビルドファイルをクリーンアップ
-rm -rf node_modules dist
-npm install
-npm run build
-```
