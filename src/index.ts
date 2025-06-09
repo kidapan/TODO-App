@@ -88,14 +88,14 @@ app.put('/post/:id', async (req: Request, res: Response) => {
 
 app.get('/post/search', async (req: Request, res: Response) => {
   try {
-    const { q } = req.query;
+    const { word } = req.query;
 
     let query = 'SELECT * FROM todos';
     const params: any[] = [];
 
-    if (q) {
+    if (word) {
       query += ' WHERE (title LIKE ? OR content LIKE ?)';
-      const searchTerm = `%${q}%`;
+      const searchTerm = `%${word}%`;
       params.push(searchTerm, searchTerm);
     }
 
