@@ -86,6 +86,33 @@ app.put('/post/:id', async (req: Request, res: Response) => {
   }
 });
 
+app.get('/post/search', async (req: Request, res: Response) => {
+  try {
+    const { q } = req.query;
+
+    let query = 'SELECT * FROM todos';
+    const params: any[] = [];
+
+    if (q) {
+      query += ' WHERE (title LIKE ? OR content LIKE ?)';
+      const searchTerm = `%${q}%`;
+      params.push(searchTerm, searchTerm);
+    }
+
+    query += ' ORDER BY created_at DESC';
+
+    const [result] = await pool.query<mysql.ResultSetHeader>(query, params);
+
+    res.send({
+      "todos": result
+    });
+
+  } catch (error) {
+    console.error('Error searching todos:', error);
+    res.status(500).send({ error: 'Database error' });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server running at port:${port}/`);
 });
