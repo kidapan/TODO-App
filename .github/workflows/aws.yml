@@ -21,7 +21,6 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      id-token: write  # OIDC を使う場合に必要
       contents: read
 
     steps:
