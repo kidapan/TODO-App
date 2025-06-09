@@ -67,20 +67,47 @@ docker-compose up -d
 - MySQL: localhost:3306
 - Swagger UI: http://localhost:3000/ （index.htmlを開く）
 
-### ローカル開発
+### 初回セットアップ（データベーステーブル作成）
+
+初回起動時は、MySQLにテーブルを作成する必要があります
 
 ```bash
-# 依存関係をインストール
-npm install
+# Docker Composeでサービスを起動
+docker-compose up -d
 
-# 開発サーバー起動（要MySQL）
-npm run dev
+# MySQLコンテナでテーブルを作成
+docker-compose exec db mysql -u root -ppassword todo_db -e "
+CREATE TABLE IF NOT EXISTS todos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  content TEXT,
+  status ENUM('TODO', 'DONE') DEFAULT 'TODO',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);"
 
-# ビルド
-npm run build
+# テーブルが作成されたか確認
+docker-compose exec db mysql -u root -ppassword todo_db -e "SHOW TABLES;"
+```
 
-# 本番実行
-npm start
+または、MySQLコンテナに直接接続してテーブルを作成
+
+```bash
+# MySQLコンテナに接続
+docker-compose exec db mysql -u root -ppassword todo_db
+
+# SQLコマンドを実行
+CREATE TABLE IF NOT EXISTS todos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  content TEXT,
+  status ENUM('TODO', 'DONE') DEFAULT 'TODO',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+# 接続を終了
+exit
 ```
 
 ## 📖 API仕様
