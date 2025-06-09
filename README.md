@@ -14,7 +14,7 @@ TypeScript + Express + MySQL で構築されたTODO管理APIです。Docker環�
 - **言語**: TypeScript
 - **フレームワーク**: Express.js
 - **データベース**: MySQL 8.4
-- **インフラ**:
+- **インフラ**
   - Docker & Docker Compose
   - AWS ECS/ECR
 - **CI/CD**: GitHub Actions
@@ -61,7 +61,7 @@ docker-compose up
 docker-compose up -d
 ```
 
-サービスが起動すると：
+サービスが起動すると
 - API: http://localhost:3000
 - MySQL: localhost:3306
 - Swagger UI: http://localhost:3000/ （index.htmlを開く）
@@ -151,7 +151,7 @@ curl -X DELETE http://localhost:3000/post/1
 
 ### 環境変数
 
-以下の環境変数を設定してください：
+以下の環境変数を設定してください
 
 ```bash
 DB_HOST=localhost
@@ -200,7 +200,7 @@ GitHub Actions を使用して AWS ECS への自動デプロイに対応して�
 
 ## 🔍 API ドキュメント
 
-Swagger UI で API仕様を確認できます：
+Swagger UI で API仕様を確認できます
 
 1. アプリケーションを起動
 2. ブラウザで `index.html` を開く
