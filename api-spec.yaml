@@ -1,0 +1,139 @@
+openapi: 3.0.3
+info:
+  title: Todo API
+  version: 1.0.0
+  description: A simple Todo API with CRUD operations
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /:
+    get:
+      summary: Health check endpoint
+      responses:
+        '200':
+          description: OK
+
+  /post:
+    get:
+      summary: Get all todos
+      responses:
+        '200':
+          description: A list of todos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  todos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Todo'
+
+    post:
+      summary: Create a new todo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewTodo'
+      responses:
+        '201':
+          description: Successfully created a todo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  todo:
+                    $ref: '#/components/schemas/Todo'
+        '500':
+          description: Database error
+
+  /post/{id}:
+    delete:
+      summary: Delete a todo by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully deleted
+        '404':
+          description: Todo not found
+
+    put:
+      summary: Update the status of a todo
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  $ref: '#/components/schemas/TodoStatus'
+              required:
+                - status
+      responses:
+        '200':
+          description: Successfully updated
+        '400':
+          description: Invalid request
+        '500':
+          description: Database error
+
+components:
+  schemas:
+    Todo:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        status:
+          $ref: '#/components/schemas/TodoStatus'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - title
+        - content
+        - status
+        - created_at
+        - updated_at
+
+    NewTodo:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+      required:
+        - title
+        - content
+
+    TodoStatus:
+      type: string
+      enum:
+        - TODO
+        - DONE
