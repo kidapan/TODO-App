@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Todo API
   version: 1.0.0
-  description: A simple Todo API with CRUD operations
+  description: A simple Todo API with CRUD operations and search functionality
 
 servers:
   - url: http://localhost:3000
@@ -49,8 +49,57 @@ paths:
                 properties:
                   todo:
                     $ref: '#/components/schemas/Todo'
+        '400':
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '500':
           description: Database error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /post/search:
+    get:
+      summary: Search todos by keyword
+      description: Search todos by title or content. Returns all todos if no search term is provided.
+      parameters:
+        - name: word
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 100
+          description: Search keyword to match against title or content
+          example: "shopping"
+      responses:
+        '200':
+          description: A list of matching todos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  todos:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Todo'
+        '400':
+          description: Invalid search parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Database error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /post/{id}:
     delete:
@@ -61,11 +110,23 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
+          description: Todo ID to delete
       responses:
         '200':
           description: Successfully deleted
         '404':
           description: Todo not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: Invalid ID format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
     put:
       summary: Update the status of a todo
@@ -75,6 +136,8 @@ paths:
           required: true
           schema:
             type: integer
+            minimum: 1
+          description: Todo ID to update
       requestBody:
         required: true
         content:
@@ -91,8 +154,22 @@ paths:
           description: Successfully updated
         '400':
           description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Todo not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '500':
           description: Database error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 components:
   schemas:
@@ -101,18 +178,28 @@ components:
       properties:
         id:
           type: integer
+          description: Unique identifier for the todo
+          example: 1
         title:
           type: string
+          description: Title of the todo
+          example: "Buy groceries"
         content:
           type: string
+          description: Detailed content of the todo
+          example: "Buy milk, bread, and eggs from the supermarket"
         status:
           $ref: '#/components/schemas/TodoStatus'
         created_at:
           type: string
           format: date-time
+          description: Timestamp when the todo was created
+          example: "2023-12-01T10:00:00.000Z"
         updated_at:
           type: string
           format: date-time
+          description: Timestamp when the todo was last updated
+          example: "2023-12-01T10:00:00.000Z"
       required:
         - id
         - title
@@ -126,8 +213,16 @@ components:
       properties:
         title:
           type: string
+          minLength: 1
+          maxLength: 255
+          description: Title of the todo
+          example: "Buy groceries"
         content:
           type: string
+          minLength: 1
+          maxLength: 1000
+          description: Detailed content of the todo
+          example: "Buy milk, bread, and eggs from the supermarket"
       required:
         - title
         - content
@@ -137,3 +232,15 @@ components:
       enum:
         - TODO
         - DONE
+      description: Status of the todo item
+      example: "TODO"
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Database error"
+      required:
+        - error
